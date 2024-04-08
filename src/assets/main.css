@@ -37,18 +37,80 @@ ul {
   list-style: none;
   display: flex;
   flex-direction: column-reverse;
-
+  padding: 0;
+  width: 300px;
 }
 li {
-  padding: 10px;
+  padding: 10px 10px 10px 100px;
   border-bottom: 1px solid #333;
   position: relative;
+  display: flex;
+  column-gap: 20px;
+}
+li:last-child {
+  border-top: 1px solid #333;
 }
 .elevator {
   position: absolute;
-  height: 40px;
-  width: 40px;
-  background-color: green;
+  height: 51px;
+  width: 51px;
+  background-color: rgb(117, 209, 63);
   bottom: 0;
   left: 0;
+}
+button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  border: 1px solid #333;
+}
+button::after {
+  content: '';
+  width: 15px;
+  height: 15px;
+  background-color: rgb(117, 209, 63);
+  border-radius: 50%;
+}
+.elevator-move {
+  position: absolute;
+  height: 51px;
+  width: 51px;
+  box-shadow: 0 -200px 100px -120px crimson inset;
+  animation: background 3s infinite alternate;
+  bottom: 0;
+  left: 0;
+  /*animation: NAME-YOUR-ANIMATION 0.3s infinite;*/
+}
+@keyframes NAME-YOUR-ANIMATION {
+
+  0%, 18%, 22%, 25%, 53%, 57%, 100% {
+  background-color: rgb(117, 209, 63);
+  }
+
+  20%, 24%, 55% {
+    background-color: #e50000;
+
+  }
+}
+@keyframes background {
+  50% {
+    background: skyblue;
+    box-shadow: 0 -200px 100px -100px yellowgreen inset;
+  }
+}
+.slide-fade-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.slide-fade-leave-active {
+  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateY(20px);
+  opacity: 0;
 }

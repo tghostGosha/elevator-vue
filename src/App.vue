@@ -1,42 +1,60 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
+import {useCounterStore} from "@/stores/counter";
+import type {Store} from "pinia";
+let floor = useCounterStore()
+const floors = [1, 2, 3, 4, 5, 6]
 
+// const movingTime = (floorCall:number, currentFloor:number) =>{
+//   if(floorCall > currentFloor) {
+//     return (floorCall - currentFloor )*1000
+//   }
+//   if(floorCall < currentFloor) {
+//     return (currentFloor - floorCall )*1000
+//   }
+// }
+let count = 1
+const moveElevator = (floorCall:number) => {
+  if (count < floorCall) {
+    count++
+    setTimeout(()=>{
+      floor.increment()
+      floor.busy = true
+      console.log(floor.busy)
+      moveElevator(floorCall)
+    }, 1000)
+  }
+  if(count > floorCall) {
+    count--
+    setTimeout(()=>{
+      floor.decrease()
+      floor.busy = true
+      moveElevator(floorCall)
+    }, 1000)
+  }
+  if(floorCall === floor.floorNum) {
+    setTimeout(()=>{
+      floor.busy = false
+      console.log(floor.busy)
+    }, 3000)
+  }
+  return count
+}
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
 
-    <div class="wrapper">
-      <h1>ffdff</h1>
-
-    </div>
-  </header>
 <ul>
-  <li>
-    floor 1
-    <button>вызов</button>
-    <div class="elevator">
+  <li v-for="item in floors" :key="item" >
+    floor {{ item }}
+    <button @click="moveElevator(item)" ></button>
+    <transition name="slide-fade">
+      <div  :class=" (!floor.busy) ? 'elevator' : 'elevator-move' "  v-if="item === floor.floorNum ">
 
-    </div>
+      </div>
+    </transition>
+
   </li>
-  <li>
-    floor 2
-    <button>вызов</button>
-  </li>
-  <li>
-    floor 3
-    <button>вызов</button>
-  </li>
-  <li>
-    floor 4
-    <button>вызов</button>
-  </li>
-  <li>
-    floor 5
-    <button>вызов</button>
-  </li>
+
 </ul>
 
-<!--  <RouterView />-->
 </template>
