@@ -2,83 +2,61 @@
 import {useCounterStore} from "@/stores/counter";
 let floor = useCounterStore()
 const floors = [1, 2, 3, 4, 5, 6]
+const floors2 = [1, 2, 3, 4, 5, 6]
 
-
-
-// console.log(floor.floorNum, 'unique')
-// let count = 1
 const moveElevator = (floorCall:number) => {
-  console.log(floorCall, floor.currentLevel, 'floorCall, floor.currentLevel')
-  if (floor.currentLevel < floorCall) {
-    floor.currentLevel++
-    setTimeout(()=>{
-      floor.busy = true
-      moveElevator(floorCall)
-    }, 1000)
-  }
-  if(floor.currentLevel  > floorCall) {
-    floor.currentLevel--
-    setTimeout(()=>{
-      moveElevator(floorCall)
-    }, 1000)
-  }
   if(floorCall === floor.currentLevel ) {
     setTimeout(()=>{
-      floor.busy = false
-      console.log(floor.floorNum, 'конец')
+      if(floor.floorNum.length!=0) {
+        goToLevel()
+      } else {
+        floor.busy = false
+      }
     }, 3000)
+  } else {
+    floor.busy = true
+    floor.currentLevel+=(floor.currentLevel < floorCall) ? 1 : -1
+    setTimeout(()=> {
+      moveElevator((floorCall))
+    }, 1000)
   }
   return floor.currentLevel
 }
-let timer:any = null
-
 const addTurn = (floorCall:number) => {
-  // clearTimeout(timer)
-  let start =  floor.floorNum.length === 0
   floor.floorNum.push(floorCall)
   console.log(floor.floorNum, 'addTurn')
-  if(start) {
+  if(!floor.busy) {
     goToLevel()
   }
-  // timer = setTimeout(()=>{
-  //   goToLevel()
-  // }, 2000)
-
 }
 const goToLevel = () => {
   if(floor.floorNum.length > 0) {
     let level:number|undefined = floor.floorNum.shift()
 
     if(level!=undefined) {
-      let stepsTimer:number=Math.abs((floor.currentLevel - level)*1000)
-      console.log(level, stepsTimer, 'level')
       moveElevator(level)
-      setTimeout(()=>{
-        goToLevel()
-      },stepsTimer+ 3000)
-
     }
   }
 }
-
-
-
 </script>
 
 <template>
-
 <ul>
   <li v-for="item in floors" :key="item" >
     floor {{ item }}
     <button @click="addTurn(item)" ></button>
     <transition name="slide-fade">
-      <div  :class=" (!floor.busy) ? 'elevator' : 'elevator-move' "  v-if="item === floor.currentLevel ">
-
-      </div>
+      <div  :class=" (!floor.busy) ? 'elevator' : 'elevator-move' "  v-if="item === floor.currentLevel "/>
     </transition>
-
   </li>
-
 </ul>
-
+  <ul>
+    <li v-for="item in floors2" :key="item" >
+      floor {{ item }}
+      <button @click="addTurn(item)" ></button>
+      <transition name="slide-fade">
+        <div  :class=" (!floor.busy) ? 'elevator' : 'elevator-move' "  v-if="item === floor.currentLevel "/>
+      </transition>
+    </li>
+  </ul>
 </template>
