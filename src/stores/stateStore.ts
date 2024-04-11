@@ -21,6 +21,7 @@ export const useStore = defineStore('state', {
       busy: false,
     }
   },
+
   actions: {
     pushing(value:number) {
       this.floorNum.push(value)

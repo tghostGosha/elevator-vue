@@ -6,8 +6,8 @@ import Floor from "@/components/Floor.vue";
 <template>
 <div class="container">
   <Floor :count="6" />
-  <Floor :count="5" />
-  <Floor :count="7"  />
+
+
 </div>
 
 
